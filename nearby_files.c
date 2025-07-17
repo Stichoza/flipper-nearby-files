@@ -13,7 +13,7 @@ static const char* scan_directories[] = {"/ext/subghz", "/ext/nfc", "/ext/lfrfid
 static const size_t scan_directories_count = sizeof(scan_directories) / sizeof(scan_directories[0]);
 
 // App names for launching
-static const char* app_names[] = {"subghz", "nfc", "lfrfid"};
+static const char* app_names[] = {"Sub-GHz", "NFC", "125 kHz RFID"};
 
 // Directory filter callback
 static bool nearby_files_dir_filter(const char* path, FileInfo* file_info, void* context) {
@@ -231,16 +231,14 @@ void nearby_files_file_selected_callback(void* context, uint32_t index) {
         FURI_LOG_I(TAG, "Opening %s with %s", furi_string_get_cstr(item->path), item->app_name);
         
         // Launch the appropriate app with the selected file
-        LoaderStatus status = loader_start_with_gui_error(
+        loader_start_detached_with_gui_error(
             app->loader, 
             item->app_name, 
             furi_string_get_cstr(item->path));
         
-        if(status == LoaderStatusOk) {
-            // Exit our app after successful launch
-            scene_manager_stop(app->scene_manager);
-            view_dispatcher_stop(app->view_dispatcher);
-        }
+        // Exit our app after launching
+        scene_manager_stop(app->scene_manager);
+        view_dispatcher_stop(app->view_dispatcher);
     }
 }
 
