@@ -237,9 +237,16 @@ void nearby_files_file_selected_callback(void* context, uint32_t index) {
             furi_string_get_cstr(item->path),
             LoaderDeferredLaunchFlagGui);
         
-        FURI_LOG_I(TAG, "Queued launch of %s with file %s", item->app_name, furi_string_get_cstr(item->path));
+        // Queue our app to launch again after the file handler exits
+        loader_enqueue_launch(
+            app->loader,
+            EXT_PATH("apps/Tools/nearby_files.fap"),
+            NULL,
+            LoaderDeferredLaunchFlagNone);
         
-        // Exit our app to allow the queued app to launch
+        FURI_LOG_I(TAG, "Queued launch of %s with file %s, then return to Nearby Files", item->app_name, furi_string_get_cstr(item->path));
+        
+        // Exit our app to allow the queued apps to launch
         scene_manager_stop(app->scene_manager);
         view_dispatcher_stop(app->view_dispatcher);
     }
