@@ -40,6 +40,19 @@ static bool nearby_files_file_filter(const char* path, FileInfo* file_info, void
     UNUSED(context);
     
     if(!(file_info->flags & FSF_DIRECTORY)) {
+        // Get filename from path
+        const char* filename = strrchr(path, '/');
+        if(filename) {
+            filename++; // Skip the '/'
+        } else {
+            filename = path;
+        }
+        
+        // Ignore files starting with dot
+        if(filename[0] == '.') {
+            return false;
+        }
+        
         // Check if file has one of the target extensions
         for(size_t i = 0; i < file_extensions_count; i++) {
             size_t path_len = strlen(path);
