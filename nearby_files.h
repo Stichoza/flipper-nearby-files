@@ -6,6 +6,7 @@
 #include <gui/scene_manager.h>
 #include <gui/modules/variable_item_list.h>
 #include <gui/modules/widget.h>
+#include <gui/modules/submenu.h>
 #include <storage/storage.h>
 #include <toolbox/dir_walk.h>
 #include <loader/loader.h>
@@ -19,6 +20,8 @@ typedef struct NearbyFilesApp NearbyFilesApp;
 typedef enum {
     NearbyFilesViewVariableItemList,
     NearbyFilesViewWidget,
+    NearbyFilesViewSubmenu,
+    NearbyFilesViewAbout,
 } NearbyFilesView;
 
 
@@ -26,6 +29,8 @@ typedef enum {
 typedef enum {
     NearbyFilesCustomEventNone,
     NearbyFilesCustomEventFileSelected,
+    NearbyFilesCustomEventRefreshList,
+    NearbyFilesCustomEventAbout,
 } NearbyFilesCustomEvent;
 
 typedef struct {
@@ -40,6 +45,8 @@ struct NearbyFilesApp {
     SceneManager* scene_manager;
     VariableItemList* variable_item_list;
     Widget* widget;
+    Submenu* submenu;
+    Widget* about_widget;
     Storage* storage;
     Loader* loader;
     
@@ -60,6 +67,7 @@ void nearby_files_clear_files(NearbyFilesApp* app);
 
 // UI helpers
 void nearby_files_populate_list(NearbyFilesApp* app);
+void nearby_files_refresh_and_populate(NearbyFilesApp* app);
 void nearby_files_file_selected_callback(void* context, uint32_t index);
 
 #ifdef __cplusplus

@@ -20,8 +20,8 @@ bool nearby_files_scene_file_list_on_event(void* context, SceneManagerEvent even
             consumed = true;
         }
     } else if(event.type == SceneManagerEventTypeBack) {
-        // Exit the app when back button is pressed in file list
-        view_dispatcher_stop(app->view_dispatcher);
+        // Go to menu when back button is pressed in file list
+        scene_manager_next_scene(app->scene_manager, NearbyFilesSceneMenu);
         consumed = true;
     }
     

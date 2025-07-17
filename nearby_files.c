@@ -114,6 +114,44 @@ NearbyFilesApp* nearby_files_app_alloc(void) {
     app->widget = widget_alloc();
     view_dispatcher_add_view(app->view_dispatcher, NearbyFilesViewWidget, widget_get_view(app->widget));
     
+    // Initialize submenu
+    app->submenu = submenu_alloc();
+    view_dispatcher_add_view(app->view_dispatcher, NearbyFilesViewSubmenu, submenu_get_view(app->submenu));
+    
+    // Initialize about widget
+    app->about_widget = widget_alloc();
+    widget_add_text_scroll_element(
+        app->about_widget,
+        0,
+        0,
+        128,
+        64,
+        "Nearby Files v0.1\n"
+        "\n"
+        "Lists Sub-GHz, NFC and RFID\n"
+        "files sorted by distance from\n"
+        "current location.\n"
+        "(GPS module required)\n"
+        "\n"
+        "Files must include Lat: and\n"
+        "Lon: entries to be able to\n"
+        "calculate the distance.\n"
+        "\n"
+        "Some custom firmwares like\n"
+        "Momentum and RogueMaster\n"
+        "add these coordinates at the\n"
+        "time of recording if the GPS\n"
+        "option is enabled.\n"
+        "\n"
+        "Click a file to launch it in the\n"
+        "appropriate app.\n"
+        "\n"
+        "Author: @Stichoza\n"
+        "\n"
+        "For information or issues,\n"
+        "go to https://github.com/Stichoza/flipper-nearby-files");
+    view_dispatcher_add_view(app->view_dispatcher, NearbyFilesViewAbout, widget_get_view(app->about_widget));
+    
     view_dispatcher_attach_to_gui(app->view_dispatcher, app->gui, ViewDispatcherTypeFullscreen);
     
     // Initialize file list
@@ -133,8 +171,12 @@ void nearby_files_app_free(NearbyFilesApp* app) {
     // Free views
     view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewVariableItemList);
     view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewWidget);
+    view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewSubmenu);
+    view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewAbout);
     variable_item_list_free(app->variable_item_list);
     widget_free(app->widget);
+    submenu_free(app->submenu);
+    widget_free(app->about_widget);
     
     // Free managers
     view_dispatcher_free(app->view_dispatcher);
@@ -250,6 +292,14 @@ void nearby_files_populate_list(NearbyFilesApp* app) {
             NULL,  // No change callback
             NULL); // No item context needed
     }
+}
+
+void nearby_files_refresh_and_populate(NearbyFilesApp* app) {
+    // Scan directories to refresh file list
+    nearby_files_scan_directories(app);
+    
+    // Populate the UI list with refreshed files
+    nearby_files_populate_list(app);
 }
 
 void nearby_files_file_selected_callback(void* context, uint32_t index) {
