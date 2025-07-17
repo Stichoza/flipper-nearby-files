@@ -230,13 +230,16 @@ void nearby_files_file_selected_callback(void* context, uint32_t index) {
         
         FURI_LOG_I(TAG, "Opening %s with %s", furi_string_get_cstr(item->path), item->app_name);
         
-        // Launch the appropriate app with the selected file
-        loader_start_detached_with_gui_error(
+        // Queue the app launch to happen after our app exits
+        loader_enqueue_launch(
             app->loader, 
             item->app_name, 
-            furi_string_get_cstr(item->path));
+            furi_string_get_cstr(item->path),
+            LoaderDeferredLaunchFlagGui);
         
-        // Exit our app after launching
+        FURI_LOG_I(TAG, "Queued launch of %s with file %s", item->app_name, furi_string_get_cstr(item->path));
+        
+        // Exit our app to allow the queued app to launch
         scene_manager_stop(app->scene_manager);
         view_dispatcher_stop(app->view_dispatcher);
     }
