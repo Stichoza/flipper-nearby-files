@@ -4,11 +4,11 @@
 void nearby_files_scene_file_list_on_enter(void* context) {
     NearbyFilesApp* app = context;
     
-    // Populate menu with found files
-    nearby_files_populate_menu(app);
+    // Populate list with found files
+    nearby_files_populate_list(app);
     
-    // Switch to menu view
-    view_dispatcher_switch_to_view(app->view_dispatcher, NearbyFilesViewMenu);
+    // Switch to variable item list view
+    view_dispatcher_switch_to_view(app->view_dispatcher, NearbyFilesViewVariableItemList);
 }
 
 bool nearby_files_scene_file_list_on_event(void* context, SceneManagerEvent event) {
@@ -26,5 +26,5 @@ bool nearby_files_scene_file_list_on_event(void* context, SceneManagerEvent even
 
 void nearby_files_scene_file_list_on_exit(void* context) {
     NearbyFilesApp* app = context;
-    menu_reset(app->menu);
+    variable_item_list_reset(app->variable_item_list);
 }

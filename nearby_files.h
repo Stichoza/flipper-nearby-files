@@ -4,7 +4,7 @@
 #include <gui/gui.h>
 #include <gui/view_dispatcher.h>
 #include <gui/scene_manager.h>
-#include <gui/modules/menu.h>
+#include <gui/modules/variable_item_list.h>
 #include <gui/modules/widget.h>
 #include <storage/storage.h>
 #include <toolbox/dir_walk.h>
@@ -17,7 +17,7 @@ extern "C" {
 typedef struct NearbyFilesApp NearbyFilesApp;
 
 typedef enum {
-    NearbyFilesViewMenu,
+    NearbyFilesViewVariableItemList,
     NearbyFilesViewWidget,
 } NearbyFilesView;
 
@@ -38,7 +38,7 @@ struct NearbyFilesApp {
     Gui* gui;
     ViewDispatcher* view_dispatcher;
     SceneManager* scene_manager;
-    Menu* menu;
+    VariableItemList* variable_item_list;
     Widget* widget;
     Storage* storage;
     Loader* loader;
@@ -59,7 +59,7 @@ void nearby_files_add_file(NearbyFilesApp* app, const char* path, const char* na
 void nearby_files_clear_files(NearbyFilesApp* app);
 
 // UI helpers
-void nearby_files_populate_menu(NearbyFilesApp* app);
+void nearby_files_populate_list(NearbyFilesApp* app);
 void nearby_files_file_selected_callback(void* context, uint32_t index);
 
 #ifdef __cplusplus

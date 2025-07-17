@@ -80,9 +80,14 @@ NearbyFilesApp* nearby_files_app_alloc(void) {
     view_dispatcher_set_custom_event_callback(app->view_dispatcher, nearby_files_custom_event_callback);
     view_dispatcher_set_navigation_event_callback(app->view_dispatcher, nearby_files_navigation_callback);
     
-    // Initialize menu
-    app->menu = menu_alloc();
-    view_dispatcher_add_view(app->view_dispatcher, NearbyFilesViewMenu, menu_get_view(app->menu));
+    // Initialize variable item list
+    app->variable_item_list = variable_item_list_alloc();
+    variable_item_list_set_enter_callback(
+        app->variable_item_list, nearby_files_file_selected_callback, app);
+    view_dispatcher_add_view(
+        app->view_dispatcher, 
+        NearbyFilesViewVariableItemList, 
+        variable_item_list_get_view(app->variable_item_list));
     
     // Initialize widget
     app->widget = widget_alloc();
@@ -105,9 +110,9 @@ void nearby_files_app_free(NearbyFilesApp* app) {
     nearby_files_clear_files(app);
     
     // Free views
-    view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewMenu);
+    view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewVariableItemList);
     view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewWidget);
-    menu_free(app->menu);
+    variable_item_list_free(app->variable_item_list);
     widget_free(app->widget);
     
     // Free managers
@@ -204,17 +209,16 @@ bool nearby_files_scan_directories(NearbyFilesApp* app) {
     return success;
 }
 
-void nearby_files_populate_menu(NearbyFilesApp* app) {
-    menu_reset(app->menu);
+void nearby_files_populate_list(NearbyFilesApp* app) {
+    variable_item_list_reset(app->variable_item_list);
     
     for(size_t i = 0; i < app->file_count; i++) {
-        menu_add_item(
-            app->menu,
+        variable_item_list_add(
+            app->variable_item_list,
             furi_string_get_cstr(app->files[i].name),
-            NULL,
-            i,
-            nearby_files_file_selected_callback,
-            app);
+            0,  // No values count for simple list items
+            NULL,  // No change callback
+            NULL); // No item context needed
     }
 }
 
