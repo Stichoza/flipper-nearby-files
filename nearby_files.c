@@ -158,7 +158,16 @@ void nearby_files_add_file(NearbyFilesApp* app, const char* path, const char* na
     // Add new file
     NearbyFileItem* item = &app->files[app->file_count];
     item->path = furi_string_alloc_set(path);
-    item->name = furi_string_alloc_set(name);
+    
+    // Create display name without extension
+    FuriString* display_name = furi_string_alloc_set(name);
+    const char* dot = strrchr(name, '.');
+    if(dot != NULL) {
+        // Remove extension from display name
+        size_t name_len = dot - name;
+        furi_string_set_strn(display_name, name, name_len);
+    }
+    item->name = display_name;
     item->app_name = app_name;
     
     app->file_count++;
