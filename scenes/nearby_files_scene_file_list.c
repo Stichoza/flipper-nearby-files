@@ -12,13 +12,17 @@ void nearby_files_scene_file_list_on_enter(void* context) {
 }
 
 bool nearby_files_scene_file_list_on_event(void* context, SceneManagerEvent event) {
-    UNUSED(context);
+    NearbyFilesApp* app = context;
     bool consumed = false;
     
     if(event.type == SceneManagerEventTypeCustom) {
         if(event.event == NearbyFilesCustomEventFileSelected) {
             consumed = true;
         }
+    } else if(event.type == SceneManagerEventTypeBack) {
+        // Exit the app when back button is pressed in file list
+        view_dispatcher_stop(app->view_dispatcher);
+        consumed = true;
     }
     
     return consumed;
