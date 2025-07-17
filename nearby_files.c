@@ -27,6 +27,7 @@ static bool nearby_files_dir_filter(const char* path, FileInfo* file_info, void*
             
             // Exclude directories named "assets" or starting with "."
             if(strcmp(dir_name, "assets") == 0 || dir_name[0] == '.') {
+                FURI_LOG_I(TAG, "Filtering out directory: %s", path);
                 return false;
             }
         }
@@ -40,6 +41,12 @@ static bool nearby_files_file_filter(const char* path, FileInfo* file_info, void
     UNUSED(context);
     
     if(!(file_info->flags & FSF_DIRECTORY)) {
+        // Check if path contains "/assets/" directory (additional protection)
+        if(strstr(path, "/assets/") != NULL) {
+            FURI_LOG_I(TAG, "Filtering out file from assets: %s", path);
+            return false;
+        }
+        
         // Get filename from path
         const char* filename = strrchr(path, '/');
         if(filename) {
@@ -50,6 +57,7 @@ static bool nearby_files_file_filter(const char* path, FileInfo* file_info, void
         
         // Ignore files starting with dot
         if(filename[0] == '.') {
+            FURI_LOG_I(TAG, "Filtering out dotfile: %s", path);
             return false;
         }
         
