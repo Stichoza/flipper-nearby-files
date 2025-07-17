@@ -126,7 +126,8 @@ NearbyFilesApp* nearby_files_app_alloc(void) {
         0,
         128,
         64,
-        "\e#Nearby Files v0.1\n"
+        "\e#"
+        NEARBY_FILES_APP_NAME " v" NEARBY_FILES_VERSION "\n"
         "\n"
         "Lists Sub-GHz, NFC and RFID\n"
         "files sorted by distance from\n"

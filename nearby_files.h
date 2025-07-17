@@ -11,6 +11,9 @@
 #include <toolbox/dir_walk.h>
 #include <loader/loader.h>
 
+#define NEARBY_FILES_VERSION "0.2"
+#define NEARBY_FILES_APP_NAME "Nearby Files"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -23,7 +23,7 @@ void nearby_files_scene_menu_on_enter(void* context) {
     NearbyFilesApp* app = context;
     
     submenu_reset(app->submenu);
-    submenu_set_header(app->submenu, "Nearby Files v0.1");
+    submenu_set_header(app->submenu, NEARBY_FILES_APP_NAME " v" NEARBY_FILES_VERSION);
     
     submenu_add_item(
         app->submenu,
