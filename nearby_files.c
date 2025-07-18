@@ -1,6 +1,7 @@
 #include "nearby_files.h"
 #include "scenes/nearby_files_scene.h"
 #include <furi_hal.h>
+#include <math.h>
 
 #define TAG "NearbyFiles"
 
@@ -213,6 +214,24 @@ void nearby_files_add_file(NearbyFilesApp* app, const char* path, const char* na
     item->name = display_name;
     item->app_name = app_name;
     
+    // Parse GPS coordinates from file
+    double latitude, longitude;
+    if(nearby_files_parse_coordinates(path, &latitude, &longitude)) {
+        item->latitude = latitude;
+        item->longitude = longitude;
+        item->has_coordinates = true;
+        // Calculate distance from current location
+        item->distance = nearby_files_calculate_distance(
+            CURRENT_LATITUDE, CURRENT_LONGITUDE,
+            latitude, longitude
+        );
+    } else {
+        item->latitude = 0.0;
+        item->longitude = 0.0;
+        item->distance = INFINITY;  // Files without coordinates go to the end
+        item->has_coordinates = false;
+    }
+    
     app->file_count++;
 }
 
@@ -279,6 +298,10 @@ bool nearby_files_scan_directories(NearbyFilesApp* app) {
     }
     
     FURI_LOG_I(TAG, "Found %zu files", app->file_count);
+    
+    // Sort files by distance from current location
+    nearby_files_sort_by_distance(app);
+    
     return success;
 }
 
@@ -301,6 +324,133 @@ void nearby_files_refresh_and_populate(NearbyFilesApp* app) {
     
     // Populate the UI list with refreshed files
     nearby_files_populate_list(app);
+}
+
+bool nearby_files_parse_coordinates(const char* file_path, double* latitude, double* longitude) {
+    Storage* storage = furi_record_open(RECORD_STORAGE);
+    File* file = storage_file_alloc(storage);
+    
+    if(!storage_file_open(file, file_path, FSAM_READ, FSOM_OPEN_EXISTING)) {
+        storage_file_free(file);
+        furi_record_close(RECORD_STORAGE);
+        return false;
+    }
+    
+    char buffer[256];
+    bool lat_found = false, lon_found = false;
+    
+    // Read file character by character to build lines
+    FuriString* line = furi_string_alloc();
+    
+    while(storage_file_read(file, buffer, 1) == 1) {
+        if(buffer[0] == '\n' || buffer[0] == '\r') {
+            // Process the line
+            const char* line_str = furi_string_get_cstr(line);
+            
+            // Check for latitude keys
+            if(!lat_found) {
+                if(strncmp(line_str, "Lat: ", 5) == 0) {
+                    *latitude = strtod(line_str + 5, NULL);
+                    lat_found = true;
+                } else if(strncmp(line_str, "Latitude: ", 10) == 0) {
+                    *latitude = strtod(line_str + 10, NULL);
+                    lat_found = true;
+                } else if(strncmp(line_str, "Latitute: ", 10) == 0) {  // Typo version
+                    *latitude = strtod(line_str + 10, NULL);
+                    lat_found = true;
+                }
+            }
+            
+            // Check for longitude keys
+            if(!lon_found) {
+                if(strncmp(line_str, "Lon: ", 5) == 0) {
+                    *longitude = strtod(line_str + 5, NULL);
+                    lon_found = true;
+                } else if(strncmp(line_str, "Longitude: ", 11) == 0) {
+                    *longitude = strtod(line_str + 11, NULL);
+                    lon_found = true;
+                }
+            }
+            
+            // If both found, we can stop reading
+            if(lat_found && lon_found) break;
+            
+            // Reset line for next iteration
+            furi_string_reset(line);
+        } else {
+            // Add character to current line
+            furi_string_push_back(line, buffer[0]);
+        }
+    }
+    
+    furi_string_free(line);
+    storage_file_close(file);
+    storage_file_free(file);
+    furi_record_close(RECORD_STORAGE);
+    
+    return lat_found && lon_found;
+}
+
+double nearby_files_calculate_distance(double lat1, double lon1, double lat2, double lon2) {
+    // Haversine formula for calculating distance between two GPS coordinates
+    const float R = 6371000.0f; // Earth's radius in meters
+    const float PI = 3.14159265f; // Define PI as float
+    const float DEG_TO_RAD = PI / 180.0f;
+    
+    // Convert degrees to radians
+    float lat1_rad = (float)lat1 * DEG_TO_RAD;
+    float lat2_rad = (float)lat2 * DEG_TO_RAD;
+    float delta_lat = ((float)lat2 - (float)lat1) * DEG_TO_RAD;
+    float delta_lon = ((float)lon2 - (float)lon1) * DEG_TO_RAD;
+    
+    float half_delta_lat = delta_lat / 2.0f;
+    float half_delta_lon = delta_lon / 2.0f;
+    
+    float sin_half_delta_lat = sin(half_delta_lat);
+    float cos_lat1 = cos(lat1_rad);
+    float cos_lat2 = cos(lat2_rad);
+    float sin_half_delta_lon = sin(half_delta_lon);
+    
+    float a = sin_half_delta_lat * sin_half_delta_lat +
+              cos_lat1 * cos_lat2 * sin_half_delta_lon * sin_half_delta_lon;
+    float c = 2.0f * atan2f(sqrtf(a), sqrtf(1.0f - a));
+    
+    return (double)(R * c); // Distance in meters, return as double
+}
+
+static int nearby_files_compare_by_distance(const void* a, const void* b) {
+    const NearbyFileItem* item_a = (const NearbyFileItem*)a;
+    const NearbyFileItem* item_b = (const NearbyFileItem*)b;
+    
+    // Files with coordinates come first, sorted by distance
+    if(item_a->has_coordinates && !item_b->has_coordinates) return -1;
+    if(!item_a->has_coordinates && item_b->has_coordinates) return 1;
+    
+    // If both have coordinates, sort by distance
+    if(item_a->has_coordinates && item_b->has_coordinates) {
+        if(item_a->distance < item_b->distance) return -1;
+        if(item_a->distance > item_b->distance) return 1;
+        return 0;
+    }
+    
+    // If neither has coordinates, sort alphabetically by name
+    return strcmp(furi_string_get_cstr(item_a->name), furi_string_get_cstr(item_b->name));
+}
+
+void nearby_files_sort_by_distance(NearbyFilesApp* app) {
+    if(app->file_count <= 1) return;
+    
+    // Simple bubble sort implementation since qsort is not available
+    for(size_t i = 0; i < app->file_count - 1; i++) {
+        for(size_t j = 0; j < app->file_count - i - 1; j++) {
+            if(nearby_files_compare_by_distance(&app->files[j], &app->files[j + 1]) > 0) {
+                // Swap elements
+                NearbyFileItem temp = app->files[j];
+                app->files[j] = app->files[j + 1];
+                app->files[j + 1] = temp;
+            }
+        }
+    }
 }
 
 void nearby_files_file_selected_callback(void* context, uint32_t index) {

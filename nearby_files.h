@@ -14,6 +14,10 @@
 #define NEARBY_FILES_VERSION "0.2"
 #define NEARBY_FILES_APP_NAME "Nearby Files"
 
+// Current location (hardcoded for now)
+#define CURRENT_LATITUDE 41.73005161443352
+#define CURRENT_LONGITUDE 44.691989397586156
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,6 +44,10 @@ typedef struct {
     FuriString* path;
     FuriString* name;
     const char* app_name;
+    double latitude;
+    double longitude;
+    double distance;  // Distance from current location in meters
+    bool has_coordinates;  // Whether GPS coordinates were found in file
 } NearbyFileItem;
 
 struct NearbyFilesApp {
@@ -67,6 +75,11 @@ int32_t nearby_files_app(void* p);
 bool nearby_files_scan_directories(NearbyFilesApp* app);
 void nearby_files_add_file(NearbyFilesApp* app, const char* path, const char* name, const char* app_name);
 void nearby_files_clear_files(NearbyFilesApp* app);
+
+// GPS and distance functions
+bool nearby_files_parse_coordinates(const char* file_path, double* latitude, double* longitude);
+double nearby_files_calculate_distance(double lat1, double lon1, double lat2, double lon2);
+void nearby_files_sort_by_distance(NearbyFilesApp* app);
 
 // UI helpers
 void nearby_files_populate_list(NearbyFilesApp* app);
