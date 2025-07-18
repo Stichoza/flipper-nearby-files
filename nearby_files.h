@@ -38,6 +38,7 @@ typedef enum {
     NearbyFilesCustomEventFileSelected,
     NearbyFilesCustomEventRefreshList,
     NearbyFilesCustomEventAbout,
+    NearbyFilesCustomEventExit,
 } NearbyFilesCustomEvent;
 
 typedef struct {

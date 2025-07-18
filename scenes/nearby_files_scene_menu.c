@@ -4,6 +4,7 @@
 typedef enum {
     NearbyFilesMenuItemRefreshList,
     NearbyFilesMenuItemAbout,
+    NearbyFilesMenuItemExit,
 } NearbyFilesMenuItem;
 
 void nearby_files_scene_menu_submenu_callback(void* context, uint32_t index) {
@@ -15,6 +16,9 @@ void nearby_files_scene_menu_submenu_callback(void* context, uint32_t index) {
             break;
         case NearbyFilesMenuItemAbout:
             view_dispatcher_send_custom_event(app->view_dispatcher, NearbyFilesCustomEventAbout);
+            break;
+        case NearbyFilesMenuItemExit:
+            view_dispatcher_send_custom_event(app->view_dispatcher, NearbyFilesCustomEventExit);
             break;
     }
 }
@@ -39,6 +43,13 @@ void nearby_files_scene_menu_on_enter(void* context) {
         nearby_files_scene_menu_submenu_callback,
         app);
     
+    submenu_add_item(
+        app->submenu,
+        "Exit",
+        NearbyFilesMenuItemExit,
+        nearby_files_scene_menu_submenu_callback,
+        app);
+    
     view_dispatcher_switch_to_view(app->view_dispatcher, NearbyFilesViewSubmenu);
 }
 
@@ -57,6 +68,11 @@ bool nearby_files_scene_menu_on_event(void* context, SceneManagerEvent event) {
             case NearbyFilesCustomEventAbout:
                 // Go to about scene
                 scene_manager_next_scene(app->scene_manager, NearbyFilesSceneAbout);
+                consumed = true;
+                break;
+            case NearbyFilesCustomEventExit:
+                // Exit the app when Exit menu item is selected
+                view_dispatcher_stop(app->view_dispatcher);
                 consumed = true;
                 break;
         }
