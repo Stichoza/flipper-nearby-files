@@ -214,23 +214,24 @@ void nearby_files_add_file(NearbyFilesApp* app, const char* path, const char* na
     item->name = display_name;
     item->app_name = app_name;
     
-    // Parse GPS coordinates from file
+    // Parse GPS coordinates from file - only add files with coordinates
     double latitude, longitude;
-    if(nearby_files_parse_coordinates(path, &latitude, &longitude)) {
-        item->latitude = latitude;
-        item->longitude = longitude;
-        item->has_coordinates = true;
-        // Calculate distance from current location
-        item->distance = nearby_files_calculate_distance(
-            CURRENT_LATITUDE, CURRENT_LONGITUDE,
-            latitude, longitude
-        );
-    } else {
-        item->latitude = 0.0;
-        item->longitude = 0.0;
-        item->distance = INFINITY;  // Files without coordinates go to the end
-        item->has_coordinates = false;
+    if(!nearby_files_parse_coordinates(path, &latitude, &longitude)) {
+        // File doesn't have GPS coordinates, don't add it to the list
+        furi_string_free(display_name);
+        furi_string_free(item->path);
+        return;
     }
+    
+    // File has GPS coordinates, set them up
+    item->latitude = latitude;
+    item->longitude = longitude;
+    item->has_coordinates = true;
+    // Calculate distance from current location
+    item->distance = nearby_files_calculate_distance(
+        CURRENT_LATITUDE, CURRENT_LONGITUDE,
+        latitude, longitude
+    );
     
     app->file_count++;
 }
@@ -422,19 +423,10 @@ static int nearby_files_compare_by_distance(const void* a, const void* b) {
     const NearbyFileItem* item_a = (const NearbyFileItem*)a;
     const NearbyFileItem* item_b = (const NearbyFileItem*)b;
     
-    // Files with coordinates come first, sorted by distance
-    if(item_a->has_coordinates && !item_b->has_coordinates) return -1;
-    if(!item_a->has_coordinates && item_b->has_coordinates) return 1;
-    
-    // If both have coordinates, sort by distance
-    if(item_a->has_coordinates && item_b->has_coordinates) {
-        if(item_a->distance < item_b->distance) return -1;
-        if(item_a->distance > item_b->distance) return 1;
-        return 0;
-    }
-    
-    // If neither has coordinates, sort alphabetically by name
-    return strcmp(furi_string_get_cstr(item_a->name), furi_string_get_cstr(item_b->name));
+    // All files in the list have GPS coordinates, so just sort by distance
+    if(item_a->distance < item_b->distance) return -1;
+    if(item_a->distance > item_b->distance) return 1;
+    return 0;
 }
 
 void nearby_files_sort_by_distance(NearbyFilesApp* app) {
