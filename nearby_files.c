@@ -214,24 +214,11 @@ void nearby_files_add_file(NearbyFilesApp* app, const char* path, const char* na
     item->name = display_name;
     item->app_name = app_name;
     
-    // Parse GPS coordinates from file - only add files with coordinates
-    double latitude, longitude;
-    if(!nearby_files_parse_coordinates(path, &latitude, &longitude)) {
-        // File doesn't have GPS coordinates, don't add it to the list
-        furi_string_free(display_name);
-        furi_string_free(item->path);
-        return;
-    }
-    
-    // File has GPS coordinates, set them up
-    item->latitude = latitude;
-    item->longitude = longitude;
-    item->has_coordinates = true;
-    // Calculate distance from current location
-    item->distance = nearby_files_calculate_distance(
-        CURRENT_LATITUDE, CURRENT_LONGITUDE,
-        latitude, longitude
-    );
+    // Initialize GPS fields - will be populated later for performance
+    item->latitude = 0.0;
+    item->longitude = 0.0;
+    item->has_coordinates = false;
+    item->distance = 0.0;
     
     app->file_count++;
 }
@@ -299,6 +286,9 @@ bool nearby_files_scan_directories(NearbyFilesApp* app) {
     }
     
     FURI_LOG_I(TAG, "Found %zu files", app->file_count);
+    
+    // Process GPS coordinates for all files (filter out files without coordinates)
+    nearby_files_process_gps_coordinates(app);
     
     // Sort files by distance from current location
     nearby_files_sort_by_distance(app);
@@ -419,29 +409,61 @@ double nearby_files_calculate_distance(double lat1, double lon1, double lat2, do
     return (double)(R * c); // Distance in meters, return as double
 }
 
-static int nearby_files_compare_by_distance(const void* a, const void* b) {
-    const NearbyFileItem* item_a = (const NearbyFileItem*)a;
-    const NearbyFileItem* item_b = (const NearbyFileItem*)b;
+void nearby_files_process_gps_coordinates(NearbyFilesApp* app) {
+    if(app->file_count == 0) return;
     
-    // All files in the list have GPS coordinates, so just sort by distance
-    if(item_a->distance < item_b->distance) return -1;
-    if(item_a->distance > item_b->distance) return 1;
-    return 0;
+    size_t valid_files = 0;
+    
+    // Process each file to extract GPS coordinates
+    for(size_t i = 0; i < app->file_count; i++) {
+        NearbyFileItem* item = &app->files[i];
+        double latitude, longitude;
+        
+        // Parse GPS coordinates from file
+        if(nearby_files_parse_coordinates(furi_string_get_cstr(item->path), &latitude, &longitude)) {
+            // File has GPS coordinates
+            item->latitude = latitude;
+            item->longitude = longitude;
+            item->has_coordinates = true;
+            // Calculate distance from current location
+            item->distance = nearby_files_calculate_distance(
+                CURRENT_LATITUDE, CURRENT_LONGITUDE,
+                latitude, longitude
+            );
+            
+            // Move valid file to the front of the array
+            if(valid_files != i) {
+                app->files[valid_files] = app->files[i];
+            }
+            valid_files++;
+        } else {
+            // File doesn't have GPS coordinates, free its resources
+            furi_string_free(item->path);
+            furi_string_free(item->name);
+        }
+    }
+    
+    // Update file count to only include files with GPS coordinates
+    app->file_count = valid_files;
+    
+    FURI_LOG_I(TAG, "Processed GPS coordinates, %zu files with coordinates", valid_files);
 }
 
 void nearby_files_sort_by_distance(NearbyFilesApp* app) {
     if(app->file_count <= 1) return;
     
-    // Simple bubble sort implementation since qsort is not available
-    for(size_t i = 0; i < app->file_count - 1; i++) {
-        for(size_t j = 0; j < app->file_count - i - 1; j++) {
-            if(nearby_files_compare_by_distance(&app->files[j], &app->files[j + 1]) > 0) {
-                // Swap elements
-                NearbyFileItem temp = app->files[j];
-                app->files[j] = app->files[j + 1];
-                app->files[j + 1] = temp;
-            }
+    // Insertion sort - faster than bubble sort, especially for small datasets
+    for(size_t i = 1; i < app->file_count; i++) {
+        NearbyFileItem key = app->files[i];
+        size_t j = i;
+        
+        // Move elements that are greater than key one position ahead
+        while(j > 0 && app->files[j - 1].distance > key.distance) {
+            app->files[j] = app->files[j - 1];
+            j--;
         }
+        
+        app->files[j] = key;
     }
 }
 

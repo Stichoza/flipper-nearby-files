@@ -79,6 +79,7 @@ void nearby_files_clear_files(NearbyFilesApp* app);
 // GPS and distance functions
 bool nearby_files_parse_coordinates(const char* file_path, double* latitude, double* longitude);
 double nearby_files_calculate_distance(double lat1, double lon1, double lat2, double lon2);
+void nearby_files_process_gps_coordinates(NearbyFilesApp* app);
 void nearby_files_sort_by_distance(NearbyFilesApp* app);
 
 // UI helpers
