@@ -534,32 +534,13 @@ void nearby_files_gps_timer_callback(void* context) {
     GpsCoordinates coords = gps_reader_get_coordinates(app->gps_reader);
     
     if(coords.valid) {
-        // GPS is ready, stop timer and proceed with file scanning
+        // GPS is ready, stop timer and trigger scanning scene
         furi_timer_stop(app->gps_timer);
         
-        // Update widget to show scanning message
-        widget_reset(app->widget);
-        widget_add_string_element(
-            app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Scanning for files...");
+        FURI_LOG_I(TAG, "GPS coordinates available, starting file scan");
         
-        // Scan directories for files
-        if(nearby_files_scan_directories(app)) {
-            if(app->file_count > 0) {
-                scene_manager_next_scene(app->scene_manager, NearbyFilesSceneFileList);
-            } else {
-                widget_reset(app->widget);
-                widget_add_string_element(
-                    app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "No files found");
-                widget_add_string_element(
-                    app->widget, 64, 44, AlignCenter, AlignCenter, FontSecondary, "Press Back to exit");
-            }
-        } else {
-            widget_reset(app->widget);
-            widget_add_string_element(
-                app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Scan failed");
-            widget_add_string_element(
-                app->widget, 64, 44, AlignCenter, AlignCenter, FontSecondary, "Press Back to exit");
-        }
+        // Send custom event to trigger scanning
+        view_dispatcher_send_custom_event(app->view_dispatcher, NearbyFilesCustomEventStartScan);
     }
     // If GPS is not ready yet, timer will continue and check again
 }
