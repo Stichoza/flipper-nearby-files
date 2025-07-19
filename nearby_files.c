@@ -173,14 +173,22 @@ NearbyFilesApp* nearby_files_app_alloc(void) {
 void nearby_files_app_free(NearbyFilesApp* app) {
     furi_assert(app);
     
+    FURI_LOG_I(TAG, "Starting app cleanup");
+    
     // Free file list
+    FURI_LOG_I(TAG, "Clearing file list");
     nearby_files_clear_files(app);
     
     // Free GPS reader
+    FURI_LOG_I(TAG, "Freeing GPS reader");
     gps_reader_free(app->gps_reader);
+    app->gps_reader = NULL;
     
-    // Free GPS timer
+    // Stop and free GPS timer
+    FURI_LOG_I(TAG, "Stopping and freeing GPS timer");
+    furi_timer_stop(app->gps_timer);
     furi_timer_free(app->gps_timer);
+    app->gps_timer = NULL;
     
     // Free views
     view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewVariableItemList);
@@ -197,10 +205,12 @@ void nearby_files_app_free(NearbyFilesApp* app) {
     scene_manager_free(app->scene_manager);
     
     // Close records
+    FURI_LOG_I(TAG, "Closing records");
     furi_record_close(RECORD_GUI);
     furi_record_close(RECORD_STORAGE);
     furi_record_close(RECORD_LOADER);
     
+    FURI_LOG_I(TAG, "App cleanup complete");
     free(app);
 }
 
