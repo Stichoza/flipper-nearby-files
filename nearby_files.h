@@ -28,8 +28,6 @@ typedef enum {
     NearbyFilesViewAbout,
 } NearbyFilesView;
 
-
-
 typedef enum {
     NearbyFilesCustomEventNone,
     NearbyFilesCustomEventFileSelected,
