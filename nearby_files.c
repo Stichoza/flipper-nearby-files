@@ -318,13 +318,39 @@ bool nearby_files_scan_directories(NearbyFilesApp* app) {
     return success;
 }
 
+// Format distance according to specifications:
+// < 1km: 123m (no decimals)
+// 1-10km: 4.3km (1 decimal)
+// > 10km: 14km (no decimals)
+static void nearby_files_format_distance(double distance_meters, char* buffer, size_t buffer_size) {
+    float distance_f = (float)distance_meters;
+    if(distance_f < 1000.0f) {
+        // Less than 1km - show in meters with no decimals
+        snprintf(buffer, buffer_size, "%.0fm", (double)distance_f);
+    } else if(distance_f < 10000.0f) {
+        // 1km to 10km - show in km with 1 decimal place
+        snprintf(buffer, buffer_size, "%.1fkm", (double)(distance_f / 1000.0f));
+    } else {
+        // More than 10km - show in km with no decimals
+        snprintf(buffer, buffer_size, "%.0fkm", (double)(distance_f / 1000.0f));
+    }
+}
+
 void nearby_files_populate_list(NearbyFilesApp* app) {
     variable_item_list_reset(app->variable_item_list);
     
     for(size_t i = 0; i < app->file_count; i++) {
+        // Format distance and create display string
+        char distance_str[16];
+        char display_name[256];
+        
+        nearby_files_format_distance(app->files[i].distance, distance_str, sizeof(distance_str));
+        snprintf(display_name, sizeof(display_name), "[%s] %s", 
+                distance_str, furi_string_get_cstr(app->files[i].name));
+        
         variable_item_list_add(
             app->variable_item_list,
-            furi_string_get_cstr(app->files[i].name),
+            display_name,
             0,  // No values count for simple list items
             NULL,  // No change callback
             NULL); // No item context needed
