@@ -156,6 +156,9 @@ NearbyFilesApp* nearby_files_app_alloc(void) {
     
     view_dispatcher_attach_to_gui(app->view_dispatcher, app->gui, ViewDispatcherTypeFullscreen);
     
+    // Initialize GPS reader
+    app->gps_reader = gps_reader_alloc();
+    
     // Initialize file list
     app->files = NULL;
     app->file_count = 0;
@@ -169,6 +172,9 @@ void nearby_files_app_free(NearbyFilesApp* app) {
     
     // Free file list
     nearby_files_clear_files(app);
+    
+    // Free GPS reader
+    gps_reader_free(app->gps_reader);
     
     // Free views
     view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewVariableItemList);
@@ -412,6 +418,16 @@ double nearby_files_calculate_distance(double lat1, double lon1, double lat2, do
 void nearby_files_process_gps_coordinates(NearbyFilesApp* app) {
     if(app->file_count == 0) return;
     
+    // Get current GPS coordinates
+    GpsCoordinates current_coords = gps_reader_get_coordinates(app->gps_reader);
+    
+    // Use hardcoded coordinates as fallback if GPS is not available
+    double current_lat = current_coords.valid ? current_coords.latitude : CURRENT_LATITUDE;
+    double current_lon = current_coords.valid ? current_coords.longitude : CURRENT_LONGITUDE;
+    
+    FURI_LOG_I(TAG, "Using coordinates: lat=%.6f, lon=%.6f (GPS %s)", 
+               current_lat, current_lon, current_coords.valid ? "valid" : "fallback");
+    
     size_t valid_files = 0;
     
     // Process each file to extract GPS coordinates
@@ -425,9 +441,9 @@ void nearby_files_process_gps_coordinates(NearbyFilesApp* app) {
             item->latitude = latitude;
             item->longitude = longitude;
             item->has_coordinates = true;
-            // Calculate distance from current location
+            // Calculate distance from current location (real GPS or fallback)
             item->distance = nearby_files_calculate_distance(
-                CURRENT_LATITUDE, CURRENT_LONGITUDE,
+                current_lat, current_lon,
                 latitude, longitude
             );
             

@@ -10,6 +10,7 @@
 #include <storage/storage.h>
 #include <toolbox/dir_walk.h>
 #include <loader/loader.h>
+#include "gps_reader.h"
 
 #define NEARBY_FILES_VERSION "0.2"
 #define NEARBY_FILES_APP_NAME "Nearby Files"
@@ -61,6 +62,7 @@ struct NearbyFilesApp {
     Widget* about_widget;
     Storage* storage;
     Loader* loader;
+    GpsReader* gps_reader;
     
     NearbyFileItem* files;
     size_t file_count;

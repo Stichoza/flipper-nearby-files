@@ -6,6 +6,13 @@ App(
     stack_size=4 * 1024,
     fap_icon="nearby_files_10px.png",
     fap_category="Tools",
+    fap_private_libs=[
+        Lib(
+            name="minmea",
+            sources=["minmea.c"],
+            cdefines=["timegm=mktime"],
+        ),
+    ],
     fap_version="1.0",
     fap_description="Browse and open .sub, .nfc, and .rfid files from nearby directories",
 )
