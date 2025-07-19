@@ -2,9 +2,7 @@
 
 A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID files sorted by distance from your current location.
 
-<img src="screenshots/screenshot1.png" width="256">
-<img src="screenshots/screenshot2.png" width="256">
-<img src="screenshots/screenshot3.png" width="256">
+<img src="screenshots/screenshot1.png" width="256"> <img src="screenshots/screenshot2.png" width="256"> <img src="screenshots/screenshot3.png" width="256">
 
 ## Features
 
