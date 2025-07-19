@@ -60,9 +60,9 @@ bool nearby_files_scene_menu_on_event(void* context, SceneManagerEvent event) {
     if(event.type == SceneManagerEventTypeCustom) {
         switch(event.event) {
             case NearbyFilesCustomEventRefreshList:
-                // Refresh the file list and go back to file list scene
-                nearby_files_refresh_and_populate(app);
-                scene_manager_next_scene(app->scene_manager, NearbyFilesSceneFileList);
+                // Clear existing files and go to start scene to wait for GPS
+                nearby_files_clear_files(app);
+                scene_manager_next_scene(app->scene_manager, NearbyFilesSceneStart);
                 consumed = true;
                 break;
             case NearbyFilesCustomEventAbout:

@@ -159,6 +159,9 @@ NearbyFilesApp* nearby_files_app_alloc(void) {
     // Initialize GPS reader
     app->gps_reader = gps_reader_alloc();
     
+    // Initialize GPS timer
+    app->gps_timer = furi_timer_alloc(nearby_files_gps_timer_callback, FuriTimerTypePeriodic, app);
+    
     // Initialize file list
     app->files = NULL;
     app->file_count = 0;
@@ -175,6 +178,9 @@ void nearby_files_app_free(NearbyFilesApp* app) {
     
     // Free GPS reader
     gps_reader_free(app->gps_reader);
+    
+    // Free GPS timer
+    furi_timer_free(app->gps_timer);
     
     // Free views
     view_dispatcher_remove_view(app->view_dispatcher, NearbyFilesViewVariableItemList);
@@ -418,15 +424,18 @@ double nearby_files_calculate_distance(double lat1, double lon1, double lat2, do
 void nearby_files_process_gps_coordinates(NearbyFilesApp* app) {
     if(app->file_count == 0) return;
     
-    // Get current GPS coordinates
+    // Get current GPS coordinates - must be valid
     GpsCoordinates current_coords = gps_reader_get_coordinates(app->gps_reader);
     
-    // Use hardcoded coordinates as fallback if GPS is not available
-    double current_lat = current_coords.valid ? current_coords.latitude : CURRENT_LATITUDE;
-    double current_lon = current_coords.valid ? current_coords.longitude : CURRENT_LONGITUDE;
+    if(!current_coords.valid) {
+        FURI_LOG_W(TAG, "GPS coordinates not available yet");
+        return;
+    }
     
-    FURI_LOG_I(TAG, "Using coordinates: lat=%.6f, lon=%.6f (GPS %s)", 
-               current_lat, current_lon, current_coords.valid ? "valid" : "fallback");
+    double current_lat = current_coords.latitude;
+    double current_lon = current_coords.longitude;
+    
+    FURI_LOG_I(TAG, "Using GPS coordinates: lat=%.6f, lon=%.6f", current_lat, current_lon);
     
     size_t valid_files = 0;
     
@@ -511,6 +520,48 @@ void nearby_files_file_selected_callback(void* context, uint32_t index) {
         scene_manager_stop(app->scene_manager);
         view_dispatcher_stop(app->view_dispatcher);
     }
+}
+
+void nearby_files_start_gps_wait(NearbyFilesApp* app) {
+    // Start a timer to periodically check GPS status
+    furi_timer_start(app->gps_timer, 1000); // Check every 1 second
+}
+
+void nearby_files_gps_timer_callback(void* context) {
+    NearbyFilesApp* app = context;
+    
+    // Check if GPS coordinates are available
+    GpsCoordinates coords = gps_reader_get_coordinates(app->gps_reader);
+    
+    if(coords.valid) {
+        // GPS is ready, stop timer and proceed with file scanning
+        furi_timer_stop(app->gps_timer);
+        
+        // Update widget to show scanning message
+        widget_reset(app->widget);
+        widget_add_string_element(
+            app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Scanning for files...");
+        
+        // Scan directories for files
+        if(nearby_files_scan_directories(app)) {
+            if(app->file_count > 0) {
+                scene_manager_next_scene(app->scene_manager, NearbyFilesSceneFileList);
+            } else {
+                widget_reset(app->widget);
+                widget_add_string_element(
+                    app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "No files found");
+                widget_add_string_element(
+                    app->widget, 64, 44, AlignCenter, AlignCenter, FontSecondary, "Press Back to exit");
+            }
+        } else {
+            widget_reset(app->widget);
+            widget_add_string_element(
+                app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Scan failed");
+            widget_add_string_element(
+                app->widget, 64, 44, AlignCenter, AlignCenter, FontSecondary, "Press Back to exit");
+        }
+    }
+    // If GPS is not ready yet, timer will continue and check again
 }
 
 int32_t nearby_files_app(void* p) {

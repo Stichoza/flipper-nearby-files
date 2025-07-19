@@ -63,6 +63,7 @@ struct NearbyFilesApp {
     Storage* storage;
     Loader* loader;
     GpsReader* gps_reader;
+    FuriTimer* gps_timer;
     
     NearbyFileItem* files;
     size_t file_count;
@@ -84,6 +85,8 @@ bool nearby_files_parse_coordinates(const char* file_path, double* latitude, dou
 double nearby_files_calculate_distance(double lat1, double lon1, double lat2, double lon2);
 void nearby_files_process_gps_coordinates(NearbyFilesApp* app);
 void nearby_files_sort_by_distance(NearbyFilesApp* app);
+void nearby_files_start_gps_wait(NearbyFilesApp* app);
+void nearby_files_gps_timer_callback(void* context);
 
 // UI helpers
 void nearby_files_populate_list(NearbyFilesApp* app);
