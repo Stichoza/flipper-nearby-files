@@ -12,12 +12,8 @@
 #include <loader/loader.h>
 #include "gps_reader.h"
 
-#define NEARBY_FILES_VERSION "0.2"
+#define NEARBY_FILES_VERSION "0.8"
 #define NEARBY_FILES_APP_NAME "Nearby Files"
-
-// Current location (hardcoded for now)
-#define CURRENT_LATITUDE 41.73005161443352
-#define CURRENT_LONGITUDE 44.691989397586156
 
 #ifdef __cplusplus
 extern "C" {
