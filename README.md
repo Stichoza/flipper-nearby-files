@@ -4,6 +4,9 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 <img src="screenshots/screenshot1.png" width="256"> <img src="screenshots/screenshot2.png" width="256"> <img src="screenshots/screenshot3.png" width="256">
 
+> [!Tip]
+> Check out [flipper-map.stichoza.com](https://flipper-map.stichoza.com) for a web-based version of this app. Visualize files on a map in your browser.
+
 ## Features
 
 - **GPS Integration**: Uses real GPS coordinates to calculate distances to files
@@ -67,8 +70,8 @@ Lat: 41.123456
 Lon: 44.123456
 ```
 
-> [!Tip]
-> `Latitude` and `Longitude` keywords are also supported.
+> [!Note]
+> `Latitude` and `Longitude` keywords are also supported. `Latitute` (yes, a typo) is also supported for legacy reasons.
 
 ## Scanned Directories
 
