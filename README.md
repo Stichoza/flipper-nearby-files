@@ -2,7 +2,9 @@
 
 A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID files sorted by distance from your current location.
 
-![File List](screenshots/screenshot3.png)
+<img src="screenshots/screenshot1.png" width="256">
+<img src="screenshots/screenshot2.png" width="256">
+<img src="screenshots/screenshot3.png" width="256">
 
 ## Features
 
@@ -26,8 +28,6 @@ The app waits for a valid GPS fix before scanning files. You'll see:
 - "Waiting for GPS..." when looking for GPS satellites.
   - "Satellites: X" showing satellite count while acquiring fix.
 
-![GPS Waiting](screenshots/screenshot1.png)
-
 ### File List
 Once GPS coordinates are acquired, the app scans and displays files sorted by distance:
 - Files with GPS coordinates are shown with distance indicators
@@ -48,8 +48,6 @@ Recommended connection:
 - GPS GND → Flipper GND (Pin 11) 
 - GPS TX → Flipper RX (Pin 14)
 - GPS RX → Flipper TX (Pin 13)
-
-![GPS Setup](screenshots/screenshot5.png)
 
 ## File Requirements
 
