@@ -18,9 +18,6 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 1. Copy `nearby_files.fap` to the `apps/GPIO` folder on your Flipper Zero SD card.
 2. Connect a compatible GPS module to your Flipper Zero.
 
-> [!Note]
-> GPS module wiring is well described in [ezod/flipperzero-gps](https://github.com/ezod/flipperzero-gps?tab=readme-ov-file#hardware-setup) repository.
-
 ## Usage
 
 ### GPS Waiting Screen
@@ -35,23 +32,26 @@ Once GPS coordinates are acquired, the app scans and displays files sorted by di
 - Files without coordinates are excluded from the list.
 - Click any file to launch the respective app.
 
-> [!Important]
-> File list is not autimatically recalculated unless you click "Refresh List" in the menu. The reason is to avoid choosing wrong file when the list suddenly updates right before you click.
-
 ### Menu Options
 Press Back in the file list to access:
 - **Refresh List**: Re-scan files with updated GPS position
 - **About**: App information and version details
 
+> [!Important]
+> File list is not automatically recalculated unless you click "Refresh List" in the menu. The reason is to avoid choosing wrong file when the list suddenly updates right before you click.
+
 ## Hardware Setup
 
-Connect a GPS module to your Flipper Zero using the UART pins. The app uses the NMEA channel configured in Momentum firmware settings.
+Connect a GPS module to your Flipper Zero using the GPIO pins.
 
 Recommended connection:
 - GPS VCC → Flipper 3.3V (Pin 9)
 - GPS GND → Flipper GND (Pin 11) 
 - GPS TX → Flipper RX (Pin 14)
 - GPS RX → Flipper TX (Pin 13)
+
+> [!Tip]
+> GPS module wiring is well described in [ezod/flipperzero-gps](https://github.com/ezod/flipperzero-gps?tab=readme-ov-file#hardware-setup) repository.
 
 ## File Requirements
 
@@ -61,7 +61,7 @@ Lat: 41.123456
 Lon: 44.123456
 ```
 
-> [!Note]
+> [!Tip]
 > `Latitude` and `Longitude` keywords are also supported.
 
 ## Scanned Directories
