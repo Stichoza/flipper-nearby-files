@@ -20,6 +20,11 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 ## Usage
 
+### Requirements
+
+- GPS module connected via GPIO pins.
+- SD card with SubGHz/NFC/RFID files containing GPS coordinates.
+
 ### GPS Waiting Screen
 The app waits for a valid GPS fix before scanning files. You'll see:
 - **No GPS Module** – if no GPS hardware is detected.
@@ -56,7 +61,8 @@ Recommended connection:
 ## File Requirements
 
 Files must contain GPS coordinates in one of these formats:
-```
+
+```yml
 Lat: 41.123456
 Lon: 44.123456
 ```
@@ -70,8 +76,3 @@ The app recursively scans these directories:
 - `/ext/subghz/` - SubGHz files (`.sub`)
 - `/ext/nfc/` - NFC files (`.nfc`) 
 - `/ext/lfrfid/` - RFID files (`.rfid`)
-
-## Requirements
-
-- GPS module connected via GPIO pins.
-- SD card with SubGHz/NFC/RFID files containing GPS coordinates.
