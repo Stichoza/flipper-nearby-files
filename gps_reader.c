@@ -69,6 +69,11 @@ static void gps_reader_serial_deinit(GpsReader* gps_reader) {
 static void gps_reader_parse_nmea(GpsReader* gps_reader, char* line) {
     FURI_LOG_D("GPS", "Parsing NMEA: %s", line);
     
+    // Mark GPS module as detected when any valid NMEA sentence is received
+    furi_mutex_acquire(gps_reader->mutex, FuriWaitForever);
+    gps_reader->coordinates.module_detected = true;
+    furi_mutex_release(gps_reader->mutex);
+    
     switch(minmea_sentence_id(line, false)) {
     case MINMEA_SENTENCE_RMC: {
         struct minmea_sentence_rmc frame;
@@ -86,15 +91,21 @@ static void gps_reader_parse_nmea(GpsReader* gps_reader, char* line) {
 
     case MINMEA_SENTENCE_GGA: {
         struct minmea_sentence_gga frame;
-        if(minmea_parse_gga(&frame, line) && frame.fix_quality > 0) {
-            FURI_LOG_I("GPS", "Valid GGA sentence parsed, updating coordinates");
+        if(minmea_parse_gga(&frame, line)) {
             furi_mutex_acquire(gps_reader->mutex, FuriWaitForever);
-            gps_reader->coordinates.valid = true;
-            gps_reader->coordinates.latitude = minmea_tocoord(&frame.latitude);
-            gps_reader->coordinates.longitude = minmea_tocoord(&frame.longitude);
+            // Update satellite count from GGA sentence
+            gps_reader->coordinates.satellite_count = frame.satellites_tracked;
+            if(frame.fix_quality > 0) {
+                FURI_LOG_I("GPS", "Valid GGA sentence parsed, updating coordinates (sats: %d)", frame.satellites_tracked);
+                gps_reader->coordinates.valid = true;
+                gps_reader->coordinates.latitude = minmea_tocoord(&frame.latitude);
+                gps_reader->coordinates.longitude = minmea_tocoord(&frame.longitude);
+            } else {
+                FURI_LOG_D("GPS", "GGA sentence parsed, no fix (sats: %d)", frame.satellites_tracked);
+            }
             furi_mutex_release(gps_reader->mutex);
         } else {
-            FURI_LOG_D("GPS", "GGA sentence invalid or no fix");
+            FURI_LOG_D("GPS", "GGA sentence invalid or parse failed");
         }
     } break;
 
@@ -201,6 +212,8 @@ GpsReader* gps_reader_alloc(void) {
     gps_reader->coordinates.valid = false;
     gps_reader->coordinates.latitude = 0.0f;
     gps_reader->coordinates.longitude = 0.0f;
+    gps_reader->coordinates.module_detected = false;
+    gps_reader->coordinates.satellite_count = 0;
     
     // Start worker thread
     gps_reader->thread = furi_thread_alloc_ex("GpsReaderWorker", 1024, gps_reader_worker, gps_reader);

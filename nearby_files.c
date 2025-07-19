@@ -559,6 +559,9 @@ void nearby_files_file_selected_callback(void* context, uint32_t index) {
 }
 
 void nearby_files_start_gps_wait(NearbyFilesApp* app) {
+    // Call GPS timer callback immediately to show initial status
+    nearby_files_gps_timer_callback(app);
+    
     // Start a timer to periodically check GPS status
     furi_timer_start(app->gps_timer, 1000); // Check every 1 second
 }
@@ -569,8 +572,10 @@ void nearby_files_gps_timer_callback(void* context) {
     // Check if GPS coordinates are available
     GpsCoordinates coords = gps_reader_get_coordinates(app->gps_reader);
     
-    FURI_LOG_I(TAG, "GPS timer check: valid=%s, lat=%f, lon=%f", 
-               coords.valid ? "true" : "false", 
+    FURI_LOG_I(TAG, "GPS timer check: valid=%s, module=%s, sats=%d, lat=%f, lon=%f", 
+               coords.valid ? "true" : "false",
+               coords.module_detected ? "true" : "false",
+               coords.satellite_count,
                (double)coords.latitude, (double)coords.longitude);
     
     if(coords.valid) {
@@ -581,6 +586,26 @@ void nearby_files_gps_timer_callback(void* context) {
         
         // Send custom event to trigger scanning
         view_dispatcher_send_custom_event(app->view_dispatcher, NearbyFilesCustomEventStartScan);
+    } else {
+        // Update GPS status display
+        widget_reset(app->widget);
+        
+        if(!coords.module_detected) {
+            // No GPS module detected
+            widget_add_string_element(
+                app->widget, 64, 24, AlignCenter, AlignCenter, FontPrimary, "No GPS Module");
+            widget_add_string_element(
+                app->widget, 64, 40, AlignCenter, AlignCenter, FontSecondary, "Please connect GPS module");
+        } else {
+            // GPS module detected, show satellite count
+            widget_add_string_element(
+                app->widget, 64, 24, AlignCenter, AlignCenter, FontPrimary, "Waiting for GPS...");
+            
+            FuriString* sat_str = furi_string_alloc_printf("Satellites: %d", coords.satellite_count);
+            widget_add_string_element(
+                app->widget, 64, 40, AlignCenter, AlignCenter, FontSecondary, furi_string_get_cstr(sat_str));
+            furi_string_free(sat_str);
+        }
     }
     // If GPS is not ready yet, timer will continue and check again
 }

@@ -4,10 +4,8 @@
 void nearby_files_scene_start_on_enter(void* context) {
     NearbyFilesApp* app = context;
     
-    // Show waiting for GPS widget
+    // Reset widget and switch to view - GPS timer will handle display updates
     widget_reset(app->widget);
-    widget_add_string_element(
-        app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Waiting for GPS...");
     view_dispatcher_switch_to_view(app->view_dispatcher, NearbyFilesViewWidget);
     
     // Start GPS waiting process

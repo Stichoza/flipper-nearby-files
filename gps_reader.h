@@ -10,6 +10,8 @@ typedef struct {
     bool valid;
     float latitude;
     float longitude;
+    bool module_detected;  // True if any NMEA sentences received
+    int satellite_count;   // Number of satellites in view
 } GpsCoordinates;
 
 typedef struct {
