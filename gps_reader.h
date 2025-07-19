@@ -20,7 +20,6 @@ typedef struct {
     FuriHalSerialHandle* serial_handle;
     uint32_t baudrate;
     GpsCoordinates coordinates;
-    bool thread_running;
 } GpsReader;
 
 // Initialize GPS reader

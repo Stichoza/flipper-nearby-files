@@ -569,6 +569,10 @@ void nearby_files_gps_timer_callback(void* context) {
     // Check if GPS coordinates are available
     GpsCoordinates coords = gps_reader_get_coordinates(app->gps_reader);
     
+    FURI_LOG_I(TAG, "GPS timer check: valid=%s, lat=%f, lon=%f", 
+               coords.valid ? "true" : "false", 
+               (double)coords.latitude, (double)coords.longitude);
+    
     if(coords.valid) {
         // GPS is ready, stop timer and trigger scanning scene
         furi_timer_stop(app->gps_timer);
