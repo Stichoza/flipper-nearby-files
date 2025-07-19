@@ -24,7 +24,7 @@ bool nearby_files_scene_start_on_event(void* context, SceneManagerEvent event) {
                 // Update widget to show scanning message
                 widget_reset(app->widget);
                 widget_add_string_element(
-                    app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Scanning for files...");
+                    app->widget, 64, 32, AlignCenter, AlignCenter, FontPrimary, "Calculating distances...");
                 
                 // Scan directories for files
                 if(nearby_files_scan_directories(app)) {
