@@ -78,9 +78,6 @@ Lon: 44.123456
 > [!Note]
 > `Latitude` and `Longitude` keywords are also supported. `Latitute` (yes, [a typo](https://github.com/Next-Flip/Momentum-Firmware/pull/246)) is also supported for legacy reasons.
 
-## Scanned Directories
-
-The app recursively scans these directories:
-- `/ext/subghz/` - SubGHz files (`.sub`)
-- `/ext/nfc/` - NFC files (`.nfc`) 
-- `/ext/lfrfid/` - RFID files (`.rfid`)
+> [!Warning]
+> If your Flipper is crashing or rebooting while running GPS related apps, try setting `Listen UART` to `None` in Flipper settings.
+> Source: https://github.com/flipperdevices/flipperzero-firmware/issues/4081#issuecomment-2631762477
