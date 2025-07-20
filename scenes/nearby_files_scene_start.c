@@ -46,8 +46,8 @@ bool nearby_files_scene_start_on_event(void* context, SceneManagerEvent event) {
                 break;
         }
     } else if(event.type == SceneManagerEventTypeBack) {
-        // Exit the app when back button is pressed during GPS waiting or scanning
-        view_dispatcher_stop(app->view_dispatcher);
+        // Go to menu when back button is pressed during GPS waiting or scanning
+        scene_manager_next_scene(app->scene_manager, NearbyFilesSceneMenu);
         consumed = true;
     }
     
