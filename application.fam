@@ -5,7 +5,7 @@ App(
     entry_point="nearby_files_app",
     stack_size=4 * 1024,
     fap_icon="nearby_files_10px.png",
-    fap_category="Tools",
+    fap_category="GPIO",
     fap_private_libs=[
         Lib(
             name="minmea",
