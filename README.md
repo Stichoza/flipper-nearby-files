@@ -77,7 +77,7 @@ Lon: 44.123456
 ```
 
 > [!Note]
-> `Latitude` and `Longitude` keywords are also supported. `Latitute` (yes, a typo) is also supported for legacy reasons.
+> `Latitude` and `Longitude` keywords are also supported. `Latitute` (yes, [a typo](https://github.com/Next-Flip/Momentum-Firmware/pull/246)) is also supported for legacy reasons.
 
 ## Scanned Directories
 
