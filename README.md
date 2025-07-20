@@ -24,13 +24,13 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 ## Installation
 
-1. Copy `nearby_files.fap` to the `apps/GPIO` folder on your Flipper Zero SD card.
-2. Connect a compatible GPS module to your Flipper Zero.
+1. Go to [build workflow](https://github.com/Stichoza/flipper-nearby-files/actions/workflows/build.yml) and select latest build.
+2. Download the artifact corresponding to your firmware version. The FAP is built for the Official Firmware (both release and development versions) and for Momentum and Unleashed firmware too.
+3. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
 
 ## Usage
 
 ### Requirements
-
 - GPS module connected via GPIO pins.
 - SD card with SubGHz/NFC/RFID files containing GPS coordinates.
 
@@ -58,7 +58,6 @@ Press Back in the file list to access:
 
 Connect a GPS module to your Flipper Zero using the GPIO pins.
 
-Recommended connection:
 - GPS VCC → Flipper 3.3V (Pin 9)
 - GPS GND → Flipper GND (Pin 11) 
 - GPS TX → Flipper RX (Pin 14)
