@@ -14,20 +14,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: dev channel
+          - name: OFW-Dev
             sdk-channel: dev
-          - name: release channel
+          - name: OFW-Release
             sdk-channel: release
-          - name: Unleashed dev
-            sdk-index-url: https://up.unleashedflip.com/directory.json
-            sdk-channel: dev
-          - name: Unleashed release
+          - name: Unleashed
             sdk-index-url: https://up.unleashedflip.com/directory.json
             sdk-channel: release
-          - name: Momentum dev
-            sdk-index-url: https://up.momentum-fw.dev/firmware
-            sdk-channel: dev
-          - name: Momentum release
+          - name: Momentum
             sdk-index-url: https://up.momentum-fw.dev/firmware
             sdk-channel: release
     name: 'ufbt: Build for ${{ matrix.name }}'
@@ -45,5 +39,5 @@ jobs:
       - name: Upload app artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ github.event.repository.name }}-${{ steps.build-app.outputs.suffix }}
+          name: ${{ github.event.repository.name }}-${{ matrix.name }}-${{ steps.build-app.outputs.suffix }}
           path: ${{ steps.build-app.outputs.fap-artifacts }}
