@@ -206,7 +206,7 @@ GpsReader* gps_reader_alloc(void) {
     gps_reader->mutex = furi_mutex_alloc(FuriMutexTypeNormal);
     gps_reader->rx_stream = furi_stream_buffer_alloc(GPS_RX_BUF_SIZE, 1);
     gps_reader->serial_handle = NULL;
-    gps_reader->baudrate = gps_baudrates[default_baudrate_index];
+    gps_reader->baudrate = gps_baudrates[default_baudrate_index]; // TODO: Check other baudrates
     
     // Initialize coordinates as invalid
     gps_reader->coordinates.valid = false;

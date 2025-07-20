@@ -1,10 +1,9 @@
 #pragma once
 
 #include <furi_hal.h>
-#include <momentum/momentum.h>
 
 #define GPS_RX_BUF_SIZE 512
-#define GPS_UART_CH     (momentum_settings.uart_nmea_channel)
+#define GPS_UART_CH (FuriHalSerialIdUsart)
 
 typedef struct {
     bool valid;
