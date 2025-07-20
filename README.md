@@ -78,6 +78,8 @@ Lon: 44.123456
 > [!Note]
 > `Latitude` and `Longitude` keywords are also supported. `Latitute` (yes, [a typo](https://github.com/Next-Flip/Momentum-Firmware/pull/246)) is also supported for legacy reasons.
 
+These coordinates are **automatically** added to files if you're using a custom firmware (like Momentum or RogueMaster) that has "subdriving" feature – recording location from GPS module at the time of signal capture. You can also manually add coordinates by editing the file either via Flipper mobile app or directly on SD card.
+
 > [!Warning]
 > If your Flipper is crashing or rebooting while running GPS related apps, try setting `Listen UART` to `None` in Flipper settings.
 > Source: https://github.com/flipperdevices/flipperzero-firmware/issues/4081#issuecomment-2631762477
