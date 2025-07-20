@@ -4,6 +4,12 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 <img src="screenshots/screenshot1.png" width="256"> <img src="screenshots/screenshot2.png" width="256"> <img src="screenshots/screenshot3.png" width="256">
 
+<details>
+  <summary>Show Preview</summary>
+  <img src="https://github.com/user-attachments/assets/d91aacc7-ba4f-4cc8-b855-ed37298d8df0" width="512">
+</details>
+
+
 > [!Tip]
 > Check out [flipper-map.stichoza.com](https://flipper-map.stichoza.com) for a web version of this app. Visualize files on a map in your browser.
 
