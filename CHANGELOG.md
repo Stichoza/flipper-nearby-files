@@ -116,6 +116,7 @@
 
 ## Version History Summary
 
+- **v1.2**: Flipper App Catalog compliance.
 - **v1.1**: GPS filtering improvements and app category changes
 - **v1.0**: Production release with documentation and multi-firmware support
 - **v0.7**: Enhanced GPS status display
