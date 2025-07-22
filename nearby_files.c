@@ -536,21 +536,36 @@ void nearby_files_file_selected_callback(void* context, uint32_t index) {
         
         FURI_LOG_I(TAG, "Opening %s with %s", furi_string_get_cstr(item->path), item->app_name);
         
-        // Queue the app launch to happen after our app exits
-        loader_enqueue_launch(
-            app->loader, 
-            item->app_name, 
-            furi_string_get_cstr(item->path),
-            LoaderDeferredLaunchFlagGui);
+        // Get the current app's launch path for re-launching
+        FuriString* current_app_path = furi_string_alloc();
+        if(loader_get_application_launch_path(app->loader, current_app_path)) {
+            // Queue the app launch to happen after our app exits
+            loader_enqueue_launch(
+                app->loader, 
+                item->app_name, 
+                furi_string_get_cstr(item->path),
+                LoaderDeferredLaunchFlagGui);
+            
+            // Queue our app to launch again after the file handler exits
+            loader_enqueue_launch(
+                app->loader,
+                furi_string_get_cstr(current_app_path),
+                NULL,
+                LoaderDeferredLaunchFlagNone);
+            
+            FURI_LOG_I(TAG, "Queued launch of %s with file %s, then return to Nearby Files at %s", 
+                      item->app_name, furi_string_get_cstr(item->path), furi_string_get_cstr(current_app_path));
+        } else {
+            FURI_LOG_E(TAG, "Failed to get current app launch path");
+            // Still launch the target app, but won't return to Nearby Files
+            loader_enqueue_launch(
+                app->loader, 
+                item->app_name, 
+                furi_string_get_cstr(item->path),
+                LoaderDeferredLaunchFlagGui);
+        }
         
-        // Queue our app to launch again after the file handler exits
-        loader_enqueue_launch(
-            app->loader,
-            EXT_PATH("apps/Tools/nearby_files.fap"),
-            NULL,
-            LoaderDeferredLaunchFlagNone);
-        
-        FURI_LOG_I(TAG, "Queued launch of %s with file %s, then return to Nearby Files", item->app_name, furi_string_get_cstr(item->path));
+        furi_string_free(current_app_path);
         
         // Exit our app to allow the queued apps to launch
         scene_manager_stop(app->scene_manager);
