@@ -17,13 +17,13 @@
 ### Added
 - Comprehensive documentation and README
 - Screenshots and video preview
-- Build workflows for multiple firmware variants (Momentum, Unleashed)
+- Build workflows for multiple firmware variants
 - Funding information
 - MIT License
 - Flipper Map link in documentation
 
 ### Changed
-- Removed Momentum-specific code for broader compatibility
+- Removed firmware-specific code for broader compatibility
 - Updated app icon and visual elements
 - Enhanced documentation with detailed setup instructions
 
