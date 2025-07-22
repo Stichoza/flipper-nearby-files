@@ -482,21 +482,28 @@ void nearby_files_process_gps_coordinates(NearbyFilesApp* app) {
         
         // Parse GPS coordinates from file
         if(nearby_files_parse_coordinates(furi_string_get_cstr(item->path), &latitude, &longitude)) {
-            // File has GPS coordinates
-            item->latitude = latitude;
-            item->longitude = longitude;
-            item->has_coordinates = true;
-            // Calculate distance from current location (real GPS or fallback)
-            item->distance = nearby_files_calculate_distance(
-                current_lat, current_lon,
-                latitude, longitude
-            );
-            
-            // Move valid file to the front of the array
-            if(valid_files != i) {
-                app->files[valid_files] = app->files[i];
+            // Check if coordinates are valid (not zero)
+            if((float)latitude != 0.0f && (float)longitude != 0.0f) {
+                // File has valid GPS coordinates
+                item->latitude = latitude;
+                item->longitude = longitude;
+                item->has_coordinates = true;
+                // Calculate distance from current location (real GPS or fallback)
+                item->distance = nearby_files_calculate_distance(
+                    current_lat, current_lon,
+                    latitude, longitude
+                );
+                
+                // Move valid file to the front of the array
+                if(valid_files != i) {
+                    app->files[valid_files] = app->files[i];
+                }
+                valid_files++;
+            } else {
+                // File has zero coordinates, treat as invalid
+                furi_string_free(item->path);
+                furi_string_free(item->name);
             }
-            valid_files++;
         } else {
             // File doesn't have GPS coordinates, free its resources
             furi_string_free(item->path);
