@@ -12,7 +12,7 @@
 #include <loader/loader.h>
 #include "gps_reader.h"
 
-#define NEARBY_FILES_VERSION "1.1"
+#define NEARBY_FILES_VERSION "1.2"
 #define NEARBY_FILES_APP_NAME "Nearby Files"
 
 #ifdef __cplusplus

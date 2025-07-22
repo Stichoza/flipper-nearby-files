@@ -13,7 +13,7 @@ App(
             cdefines=["timegm=mktime"],
         ),
     ],
-    fap_version="1.1",
+    fap_version="1.2",
     fap_author="Stichoza",
-    fap_description="Browse and open .sub, .nfc, and .rfid files from nearby directories",
+    fap_description="A GPS-enabled file browser that displays files sorted by distance from your current location.",
 )

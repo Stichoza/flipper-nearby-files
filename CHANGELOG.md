@@ -1,4 +1,9 @@
-## [v1.1] - 2025-07-22
+## [v1.2]
+
+### Changed
+- Minor changes to comply with Flipper App Catalog.
+
+## [v1.1]
 
 ### Added
 - GPS module information display in waiting screen
@@ -12,7 +17,7 @@
 - Files with zero GPS coordinates are now properly filtered out
 - App relaunching after launching external files now works correctly
 
-## [v1.0] - 2025-07-19
+## [v1.0]
 
 ### Added
 - Comprehensive documentation and README
@@ -31,14 +36,14 @@
 - Back button now opens menu instead of immediately exiting
 - Removed leftover hardcoded GPS coordinates
 
-## [v0.7] - 2025-07-18
+## [v0.7]
 
 ### Added
 - Satellite count display in GPS waiting screen
 - Enhanced GPS status text messages
 - Better user feedback during GPS acquisition
 
-## [v0.6] - 2025-07-18
+## [v0.6]
 
 ### Added
 - Distance display in file list (e.g., [45m], [1.3km], [23km])
@@ -47,7 +52,7 @@
 ### Fixed
 - Reverted problematic GPS parsing changes that caused instability
 
-## [v0.5] - 2025-07-17
+## [v0.5]
 
 ### Fixed
 - Major stability improvements addressing crashes and reboots
@@ -56,7 +61,7 @@
 ### Changed
 - Renamed file selection screen for better clarity
 
-## [v0.4] - 2025-07-16
+## [v0.4]
 
 ### Added
 - Real GPS module integration using minmea library
@@ -67,7 +72,7 @@
 - GPS acquisition now works reliably
 - File sorting by proximity implemented and functional
 
-## [v0.3] - 2025-07-15
+## [v0.3]
 
 ### Added
 - GPS coordinate parsing from files (Lat, Lon, Latitude, Longitude, Latitute)
@@ -80,7 +85,7 @@
 - Files without GPS coordinates are now excluded from display
 - Optimized sorting algorithm for better performance
 
-## [v0.2] - 2025-07-14
+## [v0.2]
 
 ### Added
 - Main menu with "Refresh List" and "About" options
@@ -91,7 +96,7 @@
 - Enhanced menu title display (larger and bold)
 - Improved navigation flow with back button support
 
-## [v0.1] - 2025-07-13
+## [v0.1]
 
 ### Added
 - Initial app implementation with file browsing
