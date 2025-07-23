@@ -25,21 +25,21 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 ## Installation
 
 ### Option 1
-Install from Flipper App Catalog __(coming soon)__.
+Install from Flipper App Catalog _(coming soon)_.
 
 1. Go to Flipper App Catalog and search for **Nearby Files**.
 2. Connect your Flipper Zero to your PC or laptop using USB cable.
 3. Click **Install**.
 
 ### Option 2
-Install from releases (stable build)
+Install from releases (stable builds)
 
 1. Go to releases tab and select [latest release](https://github.com/Stichoza/flipper-nearby-file).
 2. Download file corresponding to your firmware version.
 3. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
 
 ### Option 3
-Install from build workflow (development builds)
+Install from build workflow (development builds).
 
 1. Go to [build workflow](https://github.com/Stichoza/flipper-nearby-files/actions/workflows/build.yml) and select latest build.
 2. Download the artifact corresponding to your firmware version. The FAP is built for the Official Firmware (both release and development versions) and for Momentum and Unleashed custom firmwares (files with `-unlshd` and `-mntm` suffixes).
