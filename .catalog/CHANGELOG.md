@@ -1,25 +1,25 @@
-## v1.2
+# v1.2
 
-### Changed
+## Changed
 - Minor changes to comply with Flipper App Catalog.
 
-## v1.1
+# v1.1
 
-### Added
+## Added
 - GPS module information display in waiting screen
 - Enhanced GPS status feedback
 
-### Changed
+## Changed
 - App category moved to GPIO for better organization
 - Improved app relaunching mechanism (fixed hardcoded paths)
 
-### Fixed
+## Fixed
 - Files with zero GPS coordinates are now properly filtered out
 - App relaunching after launching external files now works correctly
 
-## v1.0
+# v1.0
 
-### Added
+## Added
 - Comprehensive documentation and README
 - Screenshots and video preview
 - Build workflows for multiple firmware variants
@@ -27,18 +27,18 @@
 - MIT License
 - Flipper Map link in documentation
 
-### Changed
+## Changed
 - Removed firmware-specific code for broader compatibility
 - Updated app icon and visual elements
 - Enhanced documentation with detailed setup instructions
 
-### Fixed
+## Fixed
 - Back button now opens menu instead of immediately exiting
 - Removed leftover hardcoded GPS coordinates
 
-## v0.7
+# v0.7
 
-### Added
+## Added
 - Complete GPS integration with real-time coordinate acquisition using minmea library
 - Distance-based file sorting and proximity calculation using Haversine formula
 - GPS status display with satellite count and enhanced user feedback
@@ -47,13 +47,13 @@
 - File launching functionality for .sub, .nfc, and .rfid files
 - Recursive directory scanning with smart filtering (excludes assets/dotfiles)
 
-### Changed
+## Changed
 - Files without GPS coordinates are excluded from display
 - VariableItemList UI for compact file display
 - File extensions hidden in display for cleaner interface
 - Optimized sorting algorithms for better performance
 
-### Fixed
+## Fixed
 - GPS acquisition stability and crash/reboot issues resolved
 - File sorting by proximity works reliably
 - App restoration after launching external files

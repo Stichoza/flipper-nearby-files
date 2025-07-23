@@ -34,7 +34,7 @@ Press Back in the file list to access:
 - **Refresh List**: Re-scan files with updated GPS position
 - **About**: App information and version details
 
-> File list is not automatically recalculated unless you click "Refresh List" in the menu. The reason is to avoid choosing wrong file when the list suddenly updates right before you click.
+**Note:** File list is not automatically recalculated unless you click "Refresh List" in the menu. The reason is to avoid choosing wrong file when the list suddenly updates right before you click.
 
 ## Hardware Setup
 
