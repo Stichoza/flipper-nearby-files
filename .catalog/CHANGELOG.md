@@ -1,7 +1,7 @@
-# v1.2
+# v1.3
 
 ## Changed
-- Minor changes to comply with Flipper App Catalog.
+- Minor bugfixes
 
 # v1.1
 

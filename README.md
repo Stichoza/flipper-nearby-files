@@ -24,8 +24,14 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 ## Installation
 
+### Option 1
+Install from Flipper App Catalog (coming soon).
+
+### Option 2
+Install from build workflows
+
 1. Go to [build workflow](https://github.com/Stichoza/flipper-nearby-files/actions/workflows/build.yml) and select latest build.
-2. Download the artifact corresponding to your firmware version. The FAP is built for the Official Firmware (both release and development versions) and for two other custom firmwares (files with `**unlshd` and `**mntm` suffix).
+2. Download the artifact corresponding to your firmware version. The FAP is built for the Official Firmware (both release and development versions) and for Momentum and Unleashed custom firmwares (files with `-unlshd` and `-mntm` suffixes).
 3. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
 
 ## Usage
@@ -78,7 +84,7 @@ Lon: 44.123456
 > [!Note]
 > `Latitude` and `Longitude` keywords are also supported. `Latitute` (typo) is also supported for legacy reasons.
 
-These coordinates are **automatically** added to files if you're using a custom firmware that has "subdriving" feature – recording location from GPS module at the time of signal capture. You can also manually add coordinates by editing the file either via Flipper mobile app or directly on SD card.
+These coordinates are **automatically** added to files if you're using a custom firmware (like Momentum or RogueMaster) that has "subdriving" feature – recording location from GPS module at the time of signal capture. You can also manually add coordinates by editing the file either via Flipper mobile app or directly on SD card.
 
 > [!Warning]
 > If your Flipper is crashing or rebooting while running GPS related apps, try setting `Listen UART` to `None` in Flipper settings.
