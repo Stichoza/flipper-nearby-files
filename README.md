@@ -95,7 +95,9 @@ Lon: 44.123456
 > [!Note]
 > `Latitude` and `Longitude` keywords are also supported. `Latitute` (typo) is also supported for legacy reasons.
 
-These coordinates are **automatically** added to files if you're using a custom firmware (like Momentum or RogueMaster) that has "subdriving" feature – recording location from GPS module at the time of signal capture. You can also manually add coordinates by editing the file either via Flipper mobile app or directly on SD card.
+These coordinates are **automatically** added to SubGHz files if you're using a custom firmware (like Momentum or RogueMaster) that has "subdriving" feature – recording location from GPS module at the time of signal capture. You can also manually add coordinates by editing the file either via Flipper mobile app or directly on SD card.
+
+Currently there are no apps or firmware that adds GPS data to NFC and RFID files, but you can always add coordinates to those files manually. Useful for location specific cards, like work badges, apartment access cards, elevator badges, etc.
 
 > [!Warning]
 > If your Flipper is crashing or rebooting while running GPS related apps, try setting `Listen UART` to `None` in Flipper settings.
