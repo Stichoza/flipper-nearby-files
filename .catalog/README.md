@@ -2,7 +2,7 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 # Features
 - **GPS Integration**: Uses real GPS coordinates to calculate distances to files
-- **Multi-format Support**: Scans `.sub`, `.nfc`, and `.rfid` files from standard directories
+- **Multi-format Support**: Scans **.sub**, **.nfc**, and **.rfid** files from standard directories
 - **Distance-based Sorting**: Files are sorted by proximity to your current GPS location
 - **Smart Filtering**: Only displays files containing GPS coordinates
 - **Distance Display**: Shows distance to each file (e.g., 45m, 1.3km, 23km)
@@ -14,12 +14,10 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 Files must contain GPS coordinates:
 
-```
-Lat: 41.123456
-Lon: 44.123456
-```
+**Lat: 41.123456**
+**Lon: 44.123456**
 
-`Latitude` and `Longitude` keywords are also supported.
+_Latitude_ and _Longitude_ keywords are also supported.
 
 # Usage
 
@@ -53,4 +51,4 @@ Connect a GPS module to your Flipper Zero using the GPIO pins.
 
 GPS module wiring is same as in [NMEA GPS](https://lab.flipper.net/apps/gps_nmea) app.
 
-If your Flipper is crashing or rebooting while running GPS related apps, try setting `Listen UART` to `None` in Flipper settings.
+If your Flipper is crashing or rebooting while running GPS related apps, try setting Listen UART to None in Flipper settings.
