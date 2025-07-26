@@ -51,6 +51,6 @@ Connect a GPS module to your Flipper Zero using the GPIO pins.
 - GPS TX → Flipper RX (Pin 14)
 - GPS RX → Flipper TX (Pin 13)
 
-GPS module wiring is same as in NMEA GPS app repo: https://lab.flipper.net/apps/gps_nmea
+GPS module wiring is same as in [NMEA GPS](https://lab.flipper.net/apps/gps_nmea) app.
 
 If your Flipper is crashing or rebooting while running GPS related apps, try setting `Listen UART` to `None` in Flipper settings.

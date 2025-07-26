@@ -42,7 +42,7 @@
 - Complete GPS integration with real-time coordinate acquisition using minmea library
 - Distance-based file sorting and proximity calculation using Haversine formula
 - GPS status display with satellite count and enhanced user feedback
-- Distance labels in file list (e.g., [45m], [1.3km], [23km]) with proper formatting
+- Distance labels in file list (e.g., 45m, 1.3km, 23km) with proper formatting
 - Main menu system with "Refresh List" and "About" options
 - File launching functionality for .sub, .nfc, and .rfid files
 - Recursive directory scanning with smart filtering (excludes assets/dotfiles)
