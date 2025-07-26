@@ -5,7 +5,7 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 - **Multi-format Support**: Scans `.sub`, `.nfc`, and `.rfid` files from standard directories
 - **Distance-based Sorting**: Files are sorted by proximity to your current GPS location
 - **Smart Filtering**: Only displays files containing GPS coordinates
-- **Distance Display**: Shows distance to each file (e.g., [45m], [1.3km], [23km])
+- **Distance Display**: Shows distance to each file (e.g., 45m, 1.3km, 23km)
 - **Direct Launch**: Click any file to launch the appropriate app (SubGHz, NFC, or RFID)
 
 # Requirements
