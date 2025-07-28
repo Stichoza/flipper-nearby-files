@@ -34,7 +34,7 @@ Install from Flipper App Catalog _(coming soon)_.
 ### Option 2
 Install from releases (stable builds)
 
-1. Go to releases tab and select [latest release](https://github.com/Stichoza/flipper-nearby-file).
+1. Go to releases tab and select [latest release](https://github.com/Stichoza/flipper-nearby-files/releases/latest).
 2. Download file corresponding to your firmware version.
 3. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
 
