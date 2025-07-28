@@ -1,3 +1,9 @@
+# v1.4
+
+## Changed
+- Minor bugfixes
+- Select UART channel by FW origin
+
 # v1.3
 
 ## Changed
