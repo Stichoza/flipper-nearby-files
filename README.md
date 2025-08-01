@@ -24,26 +24,26 @@ A GPS-enabled file browser for Flipper Zero that displays SubGHz, NFC, and RFID 
 
 ## Installation
 
-### Option 1
-Install from Flipper App Catalog _(coming soon)_.
+The app comes bundled with [Momentum](https://momentum-fw.dev/) firmware. If you're using any other firmware, you can install by any of following ways:
 
-1. Go to Flipper App Catalog and search for **Nearby Files**.
+### Option 1: Install from App Catalog
+
+1. Go to [lab.flipper.net](https://lab.flipper.net/apps/nearby_files) and search for **Nearby Files**.
 2. Connect your Flipper Zero to your PC or laptop using USB cable.
 3. Click **Install**.
 
-### Option 2
-Install from releases (stable builds)
+### Option 2: Install from File
+Install from **[releases](https://github.com/Stichoza/flipper-nearby-files/releases/latest)** (stable builds) or **[workflows](https://github.com/Stichoza/flipper-nearby-files/actions/workflows/build.yml)** (development builds).
 
-1. Go to releases tab and select [latest release](https://github.com/Stichoza/flipper-nearby-files/releases/latest).
-2. Download file corresponding to your firmware version.
-3. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
+1. Choose which version you would like to install.
+   - For stable builds, go to [latest release](https://github.com/Stichoza/flipper-nearby-files/releases/latest) page.
+   - For development builds, go to [build workflow](https://github.com/Stichoza/flipper-nearby-files/actions/workflows/build.yml) and select latest build.
+4. Download file corresponding to your firmware version. The FAP file is built for the Official Firmware (both release and development versions) and for Momentum and Unleashed custom firmwares (files with `-unlshd` and `-mntm` suffixes).
+5. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
 
-### Option 3
-Install from build workflow (development builds).
+### Option 3: Build from Source
 
-1. Go to [build workflow](https://github.com/Stichoza/flipper-nearby-files/actions/workflows/build.yml) and select latest build.
-2. Download the artifact corresponding to your firmware version. The FAP is built for the Official Firmware (both release and development versions) and for Momentum and Unleashed custom firmwares (files with `-unlshd` and `-mntm` suffixes).
-3. Extract `nearby_files.fap` from the ZIP file to the `apps/GPIO` folder on your Flipper Zero SD card.
+If you're building from source, you most pobably know what to do and how.
 
 ## Usage
 
