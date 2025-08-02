@@ -75,10 +75,12 @@ Press Back in the file list to access:
 
 Connect a GPS module to your Flipper Zero using the GPIO pins.
 
-- GPS VCC → Flipper 3.3V (Pin 9)
-- GPS GND → Flipper GND (Pin 11) 
-- GPS TX → Flipper RX (Pin 14)
-- GPS RX → Flipper TX (Pin 13)
+| GPS | Flipper      |
+|-----|--------------|
+| VCC | 3.3V (Pin 9) |
+| GND | GND (Pin 11) |
+| TX  | RX (Pin 14)  |
+| RX  | TX (Pin 13)  |
 
 > [!Tip]
 > GPS module wiring is well described in [ezod/flipperzero-gps](https://github.com/ezod/flipperzero-gps?tab=readme-ov-file#hardware-setup) repository.
