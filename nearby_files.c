@@ -2,6 +2,7 @@
 #include "scenes/nearby_files_scene.h"
 #include <furi_hal.h>
 #include <math.h>
+#include <expansion/expansion.h>
 
 #define TAG "NearbyFiles"
 
@@ -634,6 +635,10 @@ void nearby_files_gps_timer_callback(void* context) {
 
 int32_t nearby_files_app(void* p) {
     UNUSED(p);
+
+    // Disable expansion protocol to avoid interference with UART Handle
+    Expansion* expansion = furi_record_open(RECORD_EXPANSION);
+    expansion_disable(expansion);
     
     NearbyFilesApp* app = nearby_files_app_alloc();
     
@@ -641,6 +646,10 @@ int32_t nearby_files_app(void* p) {
     view_dispatcher_run(app->view_dispatcher);
     
     nearby_files_app_free(app);
+
+    // Re-enable expansion protocol
+    expansion_enable(expansion);
+    furi_record_close(RECORD_EXPANSION);
     
     return 0;
 }
