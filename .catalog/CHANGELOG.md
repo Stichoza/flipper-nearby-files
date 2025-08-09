@@ -1,3 +1,8 @@
+# v1.5
+
+## Changed
+- Added expansion protocol handling to fix unexpected crashes
+
 # v1.4
 
 ## Changed

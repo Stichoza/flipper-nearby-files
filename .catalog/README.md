@@ -51,4 +51,4 @@ Connect a GPS module to your Flipper Zero using the GPIO pins.
 
 GPS module wiring is same as in NMEA GPS app: https://github.com/ezod/flipperzero-gps
 
-If your Flipper is crashing or rebooting while running GPS related apps, try setting Listen UART to None in Flipper settings.
+If your Flipper is crashing or rebooting while running GPS related apps, change Settings > Expansion Modules > Listen UART to None in Flipper settings.
