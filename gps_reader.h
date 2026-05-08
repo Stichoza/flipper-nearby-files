@@ -2,7 +2,13 @@
 
 #include <furi_hal.h>
 
+// Define GPS_UART_CH per firmware origin
+#ifdef FW_ORIGIN_Momentum
+#include <momentum/momentum.h>
+#define GPS_UART_CH (momentum_settings.uart_nmea_channel)
+#else
 #define GPS_UART_CH (FuriHalSerialIdUsart)
+#endif
 
 #define GPS_RX_BUF_SIZE 512
 
